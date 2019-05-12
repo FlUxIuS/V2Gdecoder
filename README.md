@@ -22,6 +22,8 @@ usage: V2GEXI Helper
  -x,--xml            XML format
 ```
 
+To get it work, the directory "./schemas" should be in tool's root directory.
+
 ### Decoding data
 
 A compressed EXI data can be decoded as follows:
