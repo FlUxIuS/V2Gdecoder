@@ -22,7 +22,7 @@ usage: V2GEXI Helper
  -x,--xml            XML format
 ```
 
-To get it work, the directory "./schemas" should be in tool's root directory.
+To get it work, the directory "./schemas", containing V2G grammar, should be in tool's root directory.
 
 ### Decoding data
 
