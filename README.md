@@ -4,6 +4,8 @@ V2Gdecoder is a tool aimed to encode and decode V2G messages that commonly use E
 
 This tool is based on [RISE V2G shared library](https://github.com/V2GClarity/RISE-V2G) to easily parse messages.
 
+A release is available with a compiled Java Runtime binary there: https://github.com/FlUxIuS/V2Gdecoder/releases
+
 ## How to use
 
 V2Gdecoder supports many methods to encode XML/decode EXI data as follows:
