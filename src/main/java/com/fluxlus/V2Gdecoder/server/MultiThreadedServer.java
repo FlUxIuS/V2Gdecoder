@@ -1,4 +1,4 @@
-package server;
+package com.fluxlus.V2Gdecoder.server;
 
 import java.net.ServerSocket;
 

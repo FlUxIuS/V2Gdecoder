@@ -1,4 +1,4 @@
-package binascii;
+package com.fluxlus.V2Gdecoder.binascii;
 
 /*
  *  code from: https://github.com/EverythingMe/inbloom/blob/master/java/src/main/java/me/everything/inbloom/BinAscii.java

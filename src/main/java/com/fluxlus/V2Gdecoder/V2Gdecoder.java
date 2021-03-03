@@ -1,9 +1,11 @@
-import server.MultiThreadedServer;
+package com.fluxlus.V2Gdecoder;
+
+import com.fluxlus.V2Gdecoder.server.MultiThreadedServer;
 import java.io.IOException;
 import org.apache.commons.cli.*;
 import org.xml.sax.SAXException;
-import com.siemens.ct.exi.exceptions.EXIException;
-import dataprocess.*;
+import com.siemens.ct.exi.core.exceptions.EXIException;
+import com.fluxlus.V2Gdecoder.dataprocess.*;
 
 /*
  *  Copyright (C) V2Gdecoder by FlUxIuS (Sebastien Dudek)

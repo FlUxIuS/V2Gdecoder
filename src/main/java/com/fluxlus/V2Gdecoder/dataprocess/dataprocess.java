@@ -1,4 +1,4 @@
-package dataprocess;
+package com.fluxlus.V2Gdecoder.dataprocess;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -17,22 +17,22 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.eclipse.risev2g.shared.enumerations.GlobalValues;
-import org.eclipse.risev2g.shared.messageHandling.MessageHandler;
-import org.eclipse.risev2g.shared.utils.MiscUtils;
+import com.v2gclarity.risev2g.shared.enumerations.GlobalValues;
+import com.v2gclarity.risev2g.shared.messageHandling.MessageHandler;
+import com.v2gclarity.risev2g.shared.utils.MiscUtils;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import com.siemens.ct.exi.EXIFactory;
-import com.siemens.ct.exi.GrammarFactory;
-import com.siemens.ct.exi.api.sax.EXIResult;
-import com.siemens.ct.exi.api.sax.EXISource;
-import com.siemens.ct.exi.exceptions.EXIException;
-import com.siemens.ct.exi.helpers.DefaultEXIFactory;
+import com.siemens.ct.exi.core.EXIFactory;
+import com.siemens.ct.exi.grammars.GrammarFactory;
+import com.siemens.ct.exi.main.api.sax.EXIResult;
+import com.siemens.ct.exi.main.api.sax.EXISource;
+import com.siemens.ct.exi.core.exceptions.EXIException;
+import com.siemens.ct.exi.core.helpers.DefaultEXIFactory;
 
-import binascii.BinAscii;
+import com.fluxlus.V2Gdecoder.binascii.BinAscii;
 
 /*
  *  Copyright (C) V2Gdecoder by FlUxIuS (Sebastien Dudek)

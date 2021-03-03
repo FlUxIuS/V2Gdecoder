@@ -1,4 +1,4 @@
-package server;
+package com.fluxlus.V2Gdecoder.server;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -11,10 +11,10 @@ import java.util.Map;
 
 import org.xml.sax.SAXException;
 
-import com.siemens.ct.exi.exceptions.EXIException;
+import com.siemens.ct.exi.core.exceptions.EXIException;
 
-import dataprocess.dataprocess;
-import dataprocess.decodeMode;
+import com.fluxlus.V2Gdecoder.dataprocess.dataprocess;
+import com.fluxlus.V2Gdecoder.dataprocess.decodeMode;
 
 public class WorkerRunnable implements Runnable{
 
