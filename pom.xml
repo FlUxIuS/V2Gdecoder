@@ -21,7 +21,7 @@
   </properties>
 
   <repositories>
-  <repository>
+    <repository>
       <id>project-local-repo</id>
       <url>file://${project.basedir}/src/lib/</url>
     </repository>

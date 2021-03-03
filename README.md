@@ -9,7 +9,12 @@ A release is available with a compiled Java Runtime binary there: https://github
 ## How to compile
 Install maven.
 
-Build risev2g (or use utilities/rise-v2g-shared-1.2.6.jar):
+To compile:
+
+```mvn package```
+
+
+If you wish to update risev2g version (and not use utilities/rise-v2g-shared-1.2.6.jar):
 
 ```
 git clone https://github.com/V2GClarity/RISE-V2G/
@@ -21,9 +26,7 @@ Now copy RISE-V2G-Shared in our project:
 
 ```cp RISE-V2G/RISE-V2G-Shared/target/rise-v2g-shared-1.2.6.jar src/lib/com.v2gclarity.risev2g/```
 
-To compile:
-
-```mvn package```
+Be aware that you might have to do some changes to the code.
 
 ## How to use
 
