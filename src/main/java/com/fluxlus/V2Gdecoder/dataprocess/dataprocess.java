@@ -46,7 +46,7 @@ public class dataprocess {
 	}
 	
 	public static void initConfig() {
-		MiscUtils.setV2gEntityConfig("./test.properties");
+		MiscUtils.loadProperties("./test.properties");
 	}
 
 	public static String Xml2Exi(String xmlstr, decodeMode mode) throws IOException, SAXException, EXIException {

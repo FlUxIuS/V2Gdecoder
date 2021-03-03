@@ -1,0 +1,6 @@
+com/fluxlus/V2Gdecoder/server/WorkerRunnable.class
+com/fluxlus/V2Gdecoder/dataprocess/dataprocess.class
+com/fluxlus/V2Gdecoder/server/MultiThreadedServer.class
+com/fluxlus/V2Gdecoder/dataprocess/decodeMode.class
+com/fluxlus/V2Gdecoder/V2Gdecoder.class
+com/fluxlus/V2Gdecoder/binascii/BinAscii.class
