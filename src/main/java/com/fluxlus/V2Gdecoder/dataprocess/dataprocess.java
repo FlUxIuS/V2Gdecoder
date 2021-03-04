@@ -173,10 +173,10 @@ public class dataprocess {
 		if (inputsc.contains("supportedAppProtocol"))
 		{ // select AppProtocol schema to set V2G grammar
 			grammar = grammars[1];
-		} else if (inputsc.contains("V2G_Message")) { // select XMLDSIG
-			grammar = grammars[2];
-		} else { // MSG DEF by default
+		} else if (inputsc.contains("V2G_Message")) { // select MSG DEF
 			grammar = grammars[0];
+		} else { // XMLDSIG by default
+			grammar = grammars[2];
 		}
 
 		try {
