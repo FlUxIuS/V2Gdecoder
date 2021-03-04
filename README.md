@@ -6,15 +6,18 @@ This tool is based on [RISE V2G shared library](https://github.com/V2GClarity/RI
 
 A release is available with a compiled Java Runtime binary there: https://github.com/FlUxIuS/V2Gdecoder/releases
 
-## How to compile
+## How to compile or execute
 Install maven.
 
 To compile:
 
-```mvn package```
+```mvn compile assembly:single```
 
+To execute:
 
-If you wish to update risev2g version (and not use utilities/rise-v2g-shared-1.2.6.jar):
+```java -jar target/V2Gdecoder-jar-with-dependencies.jar```
+
+If you wish to update risev2g version to something >1.2.6:
 
 ```
 git clone https://github.com/V2GClarity/RISE-V2G/
