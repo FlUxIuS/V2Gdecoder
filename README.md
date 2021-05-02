@@ -6,6 +6,31 @@ This tool is based on [RISE V2G shared library](https://github.com/V2GClarity/RI
 
 A release is available with a compiled Java Runtime binary there: https://github.com/FlUxIuS/V2Gdecoder/releases
 
+## How to compile or execute
+Install maven.
+
+To compile:
+
+```mvn compile assembly:single```
+
+To execute:
+
+```java -jar target/V2Gdecoder-jar-with-dependencies.jar```
+
+If you wish to update risev2g version to something >1.2.6:
+
+```
+git clone https://github.com/V2GClarity/RISE-V2G/
+cd RISE-V2G/RISE-V2G-PARENT
+mvn install
+```
+
+Now copy RISE-V2G-Shared in our project:
+
+```cp RISE-V2G/RISE-V2G-Shared/target/rise-v2g-shared-1.2.6.jar src/lib/com.v2gclarity.risev2g/```
+
+Be aware that you might have to do some changes to the code.
+
 ## How to use
 
 V2Gdecoder supports many methods to encode XML/decode EXI data as follows:

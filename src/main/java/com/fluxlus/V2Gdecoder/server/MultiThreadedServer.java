@@ -1,9 +1,10 @@
-package server;
+package com.fluxlus.V2Gdecoder.server;
 
 import java.net.ServerSocket;
 
 import java.net.Socket;
 import java.io.IOException;
+import com.siemens.ct.exi.core.grammars.Grammars;	
 
 /*
  *  Copyright (C) V2Gdecoder by FlUxIuS (Sebastien Dudek)
@@ -15,9 +16,11 @@ public class MultiThreadedServer implements Runnable{
     protected ServerSocket serverSocket = null;
     protected boolean      isStopped    = false;
     protected Thread       runningThread= null;
+    protected Grammars[]     grammars     = null;
 
-    public MultiThreadedServer(int port){
+    public MultiThreadedServer(int port, Grammars[] grammars){
         this.serverPort = port;
+        this.grammars = grammars;
     }
 
     public void run(){
@@ -39,7 +42,7 @@ public class MultiThreadedServer implements Runnable{
             }
             new Thread(
                 new WorkerRunnable(
-                    clientSocket, "Multithreaded Server")
+                    clientSocket, this.grammars, "Multithreaded Server")
             ).start();
         }
         System.out.println("Server Stopped.") ;

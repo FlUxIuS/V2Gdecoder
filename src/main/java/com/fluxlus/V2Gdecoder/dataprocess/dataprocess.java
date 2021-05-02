@@ -1,4 +1,4 @@
-package dataprocess;
+package com.fluxlus.V2Gdecoder.dataprocess;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -17,39 +17,40 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.eclipse.risev2g.shared.enumerations.GlobalValues;
-import org.eclipse.risev2g.shared.messageHandling.MessageHandler;
-import org.eclipse.risev2g.shared.utils.MiscUtils;
+import com.v2gclarity.risev2g.shared.enumerations.GlobalValues;
+// import com.v2gclarity.risev2g.shared.messageHandling.MessageHandler;
+// import com.v2gclarity.risev2g.shared.utils.MiscUtils;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import com.siemens.ct.exi.EXIFactory;
-import com.siemens.ct.exi.GrammarFactory;
-import com.siemens.ct.exi.api.sax.EXIResult;
-import com.siemens.ct.exi.api.sax.EXISource;
-import com.siemens.ct.exi.exceptions.EXIException;
-import com.siemens.ct.exi.helpers.DefaultEXIFactory;
+import com.siemens.ct.exi.core.EXIFactory;
+import com.siemens.ct.exi.grammars.GrammarFactory;
+import com.siemens.ct.exi.core.grammars.Grammars;	
+import com.siemens.ct.exi.main.api.sax.EXIResult;
+import com.siemens.ct.exi.main.api.sax.EXISource;
+import com.siemens.ct.exi.core.exceptions.EXIException;
+import com.siemens.ct.exi.core.helpers.DefaultEXIFactory;
 
-import binascii.BinAscii;
+import com.fluxlus.V2Gdecoder.binascii.BinAscii;
 
 /*
  *  Copyright (C) V2Gdecoder by FlUxIuS (Sebastien Dudek)
  */
 
 public class dataprocess {
-	public MessageHandler messageHandler;
+	// public MessageHandler messageHandler;
 	
-	public MessageHandler getMessageHandler() {
-		return messageHandler;
-	}
+	// public MessageHandler getMessageHandler() {
+	// 	return messageHandler;
+	// }
 	
-	public static void initConfig() {
-		MiscUtils.setV2gEntityConfig("./test.properties");
-	}
+	// public static void initConfig() {
+	// 	MiscUtils.loadProperties("./test.properties");
+	// }
 
-	public static String Xml2Exi(String xmlstr, decodeMode mode) throws IOException, SAXException, EXIException {
+	public static String Xml2Exi(String inputsc, String xmlstr, decodeMode mode, Grammars grammar) throws IOException, SAXException, EXIException {
 		/*
 		 * 		Encode XML to EXI
 		 * 		In(1): XML string or input file path string
@@ -57,29 +58,13 @@ public class dataprocess {
 		 * 		Out: encoded result string
 		 * */
 		EXIFactory exiFactory = DefaultEXIFactory.newInstance();
-		String grammar = null;
 		ByteArrayOutputStream bosEXI = null;
 		OutputStream osEXI = null;
 		String result = null;
-		String inputsc = null;
 		String outfile = null;
 		
-		if (mode == decodeMode.FILETOSTR || mode == decodeMode.FILETOFILE)
-		{ // In case the input is a file
-			byte[] rbytes = Files.readAllBytes(Paths.get(xmlstr));
-			inputsc = new String(rbytes);
-		} else {
-			inputsc = xmlstr;
-		}
-		if (inputsc.contains("supportedAppProtocol"))
-		{ // select AppProtocol schema to set V2G grammar
-			grammar = GlobalValues.SCHEMA_PATH_APP_PROTOCOL.toString();
-		} else if (inputsc.contains("V2G_Message")) { // select XMLDSIG
-			grammar = GlobalValues.SCHEMA_PATH_MSG_DEF.toString();
-		} else { // MSG DEF by default
-			grammar = GlobalValues.SCHEMA_PATH_XMLDSIG.toString();
-		}
-		exiFactory.setGrammars(GrammarFactory.newInstance().createGrammars("." + grammar));
+		exiFactory.setGrammars(grammar);
+
 		EXIResult exiResult = new EXIResult(exiFactory);
 		if (mode == decodeMode.FILETOSTR || mode == decodeMode.STRTOSTR)
 		{ // stream output
@@ -112,7 +97,7 @@ public class dataprocess {
 		return result;
 	}
 	
-	public static String Exi2Xml(String existr, decodeMode mode, String grammar) throws IOException, SAXException, EXIException, TransformerException {
+	public static String Exi2Xml(String existr, decodeMode mode, Grammars grammar) throws IOException, SAXException, EXIException, TransformerException {
 		/*
 		 * 		Decode EXI data to XML
 		 * 		In(1): String to decode
@@ -126,7 +111,7 @@ public class dataprocess {
 		Result res = null;
 		ByteArrayOutputStream outputStream = null;
 		InputSource is = null;
-		exiFactory.setGrammars(GrammarFactory.newInstance().createGrammars("." + grammar));
+		exiFactory.setGrammars(grammar);
 		
 		if (mode == decodeMode.FILETOSTR || mode == decodeMode.FILETOFILE)
 			is = new InputSource(inputsc);
@@ -162,8 +147,8 @@ public class dataprocess {
 		
 		return result;
 	}
-	
-	public static String fuzzyExiDecoded(String strinput, decodeMode dmode)
+
+	public static String fuzzyExiEncoder(String xmlstr, decodeMode dmode, Grammars[] grammars) throws IOException, SAXException
 	{
 		/*
 		 * 		Enumerate V2G grammar to decode EXI data
@@ -171,20 +156,58 @@ public class dataprocess {
 		 * 		In(2): (decodeMode) Input/Output modes
 		 * 		Out: Decoded result string
 		 */
-		String grammar = null;
+
+		String result = null;
+		String inputsc = null;
+		Grammars grammar = null;
+
+		if (dmode == decodeMode.FILETOSTR || dmode == decodeMode.FILETOFILE)
+		{ // In case the input is a file
+			byte[] rbytes = Files.readAllBytes(Paths.get(xmlstr));
+			inputsc = new String(rbytes);
+		} else {
+			inputsc = xmlstr;
+		}
+
+		/* Selects grammar intelligenly */
+		if (inputsc.contains("supportedAppProtocol"))
+		{ // select AppProtocol schema to set V2G grammar
+			grammar = grammars[1];
+		} else if (inputsc.contains("V2G_Message")) { // select MSG DEF
+			grammar = grammars[0];
+		} else { // XMLDSIG by default
+			grammar = grammars[2];
+		}
+
+		try {
+			result = Xml2Exi(inputsc, xmlstr, dmode, grammar);
+		} catch(EXIException e)
+		{
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+	
+	public static String fuzzyExiDecoded(String strinput, decodeMode dmode, Grammars[] grammars)
+	{
+		/*
+		 * 		Enumerate V2G grammar to decode EXI data
+		 * 		In(1): Input string
+		 * 		In(2): (decodeMode) Input/Output modes
+		 * 		Out: Decoded result string
+		 */
+	
 		String result = null;
 		
-		grammar = GlobalValues.SCHEMA_PATH_MSG_DEF.toString();
 		try {
-			result = Exi2Xml(strinput, dmode, grammar);
+			result = Exi2Xml(strinput, dmode, grammars[0]);
 		} catch (Exception e1) {
 			try {
-				grammar = GlobalValues.SCHEMA_PATH_APP_PROTOCOL.toString();
-				result = Exi2Xml(strinput, dmode, grammar);
+				result = Exi2Xml(strinput, dmode, grammars[1]);
 			} catch (Exception e2) {
-				grammar = GlobalValues.SCHEMA_PATH_XMLDSIG.toString();
 				try {
-					result = Exi2Xml(strinput, dmode, grammar);
+					result = Exi2Xml(strinput, dmode, grammars[2]);
 				} catch (EXIException e3) {
 					// do nothing
 					//e3.printStackTrace();

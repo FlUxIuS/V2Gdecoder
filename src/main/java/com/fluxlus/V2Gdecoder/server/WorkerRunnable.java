@@ -1,4 +1,4 @@
-package server;
+package com.fluxlus.V2Gdecoder.server;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -11,19 +11,22 @@ import java.util.Map;
 
 import org.xml.sax.SAXException;
 
-import com.siemens.ct.exi.exceptions.EXIException;
+import com.siemens.ct.exi.core.exceptions.EXIException;
+import com.siemens.ct.exi.core.grammars.Grammars;	
 
-import dataprocess.dataprocess;
-import dataprocess.decodeMode;
+import com.fluxlus.V2Gdecoder.dataprocess.dataprocess;
+import com.fluxlus.V2Gdecoder.dataprocess.decodeMode;
 
 public class WorkerRunnable implements Runnable{
 
     protected Socket clientSocket = null;
     protected String serverText   = null;
+    protected Grammars[] grammars   = null;
 
-    public WorkerRunnable(Socket clientSocket, String serverText) {
+    public WorkerRunnable(Socket clientSocket, Grammars[] grammars, String serverText) {
         this.clientSocket = clientSocket;
         this.serverText   = serverText;
+        this.grammars     = grammars;
     } 
     
     public static Map<String, String> parseHTTPHeaders(InputStream inputStream)
@@ -87,14 +90,11 @@ public class WorkerRunnable implements Runnable{
             
             if (headers.get("Format").contains("EXI"))
             {
-            	result = dataprocess.fuzzyExiDecoded(body, decodeMode.STRTOSTR);
+            	result = dataprocess.fuzzyExiDecoded(body, decodeMode.STRTOSTR, this.grammars);
             } else {
             	try {
-					result = dataprocess.Xml2Exi(body, decodeMode.STRTOSTR);
-				} catch (SAXException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (EXIException e) {
+					result = dataprocess.fuzzyExiEncoder(body, decodeMode.STRTOSTR, this.grammars);
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}

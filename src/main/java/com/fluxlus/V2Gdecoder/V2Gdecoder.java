@@ -1,9 +1,14 @@
-import server.MultiThreadedServer;
+package com.fluxlus.V2Gdecoder;
+
+import com.fluxlus.V2Gdecoder.server.MultiThreadedServer;
 import java.io.IOException;
 import org.apache.commons.cli.*;
 import org.xml.sax.SAXException;
-import com.siemens.ct.exi.exceptions.EXIException;
-import dataprocess.*;
+import com.siemens.ct.exi.core.exceptions.EXIException;
+import com.siemens.ct.exi.core.grammars.Grammars;	
+import com.siemens.ct.exi.grammars.GrammarFactory;
+import com.v2gclarity.risev2g.shared.enumerations.GlobalValues;
+import com.fluxlus.V2Gdecoder.dataprocess.*;
 
 /*
  *  Copyright (C) V2Gdecoder by FlUxIuS (Sebastien Dudek)
@@ -51,7 +56,27 @@ public class V2Gdecoder {
 		//String outputFilePath = cmd.getOptionValue("output"); /* TODO: custom output file */
 		decodeMode dmode = decodeMode.STRTOSTR;
 		String result = null;
-		
+
+		/* Initialize grammars */
+		Grammars[] grammars = {null, null, null};
+
+		/* BOTTLENECK: slow operation */
+		try {
+			grammars[0] = GrammarFactory.newInstance().createGrammars("." + GlobalValues.SCHEMA_PATH_MSG_DEF.toString());
+		} catch (EXIException e) {
+			e.printStackTrace();			
+		}
+		try {
+			grammars[1] = GrammarFactory.newInstance().createGrammars("." + GlobalValues.SCHEMA_PATH_APP_PROTOCOL.toString());
+		} catch (EXIException e) {
+			e.printStackTrace();			
+		}
+		try {
+			grammars[2] = GrammarFactory.newInstance().createGrammars("." + GlobalValues.SCHEMA_PATH_XMLDSIG.toString());
+		} catch (EXIException e) {
+			e.printStackTrace();			
+		}
+
         if (cmd.hasOption("xml"))
         { // We wan to encode a XML input
         	if (cmd.hasOption("file"))
@@ -64,7 +89,7 @@ public class V2Gdecoder {
     			if (cmd.hasOption("output"))
     				dmode = decodeMode.STRTOSTR;
     		}
-        	result = dataprocess.Xml2Exi(inputFilePath, dmode);
+        	result = dataprocess.fuzzyExiEncoder(inputFilePath, dmode, grammars);
         	if (!cmd.hasOption("output"))
         		System.out.println(result);
         } else if (cmd.hasOption("exi")) { // We wan to decode an EXI input
@@ -78,13 +103,13 @@ public class V2Gdecoder {
     			if (cmd.hasOption("output"))
     				dmode = decodeMode.STRTOFILE;
     		}
-        	result = dataprocess.fuzzyExiDecoded(inputFilePath, dmode);
+        	result = dataprocess.fuzzyExiDecoded(inputFilePath, dmode, grammars);
         	if (!cmd.hasOption("output"))
         	{ // output in stdout
         		System.out.println(result);
         	}
         } else if (cmd.hasOption("web")) { // run a encoder/decoder service on port TCP 9000
-            MultiThreadedServer server = new MultiThreadedServer(9000);
+            MultiThreadedServer server = new MultiThreadedServer(9000, grammars);
             new Thread(server).start();
         }
 	}
