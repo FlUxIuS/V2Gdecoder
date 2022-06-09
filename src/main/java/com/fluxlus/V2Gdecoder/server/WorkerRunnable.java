@@ -64,7 +64,7 @@ public class WorkerRunnable implements Runnable{
     	InputStreamReader test = new InputStreamReader(inputStream);
     	
     	BufferedReader bufferedReader = new BufferedReader(test);
-        char[] charBuffer = new char[1024];
+        char[] charBuffer = new char[4096];
         int bytesRead;
         
         while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
